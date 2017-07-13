@@ -1,0 +1,21 @@
+.wrapper {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background-color: black;
+
+}
+.bash {
+    font-family: monospace;
+    background-color: black;
+    color: white;
+    position: absolute;
+}
+body {
+    overflow:hidden;
+    margin: 0 auto;
+    height: 100%;
+}
+html {
+    height:100%;
+}
