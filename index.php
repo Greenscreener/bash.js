@@ -24,6 +24,13 @@
 
             function echo(input) {
                 document.getElementById('bash').innerHTML+=input;
+                var inputElements = document.getElementsByClassName('inputbox');
+                if (inputElements[0] != undefined) {
+                    for (var i = 0; i < inputElements.length; i++) {
+                        inputElements[i].parentNode.removeChild(inputElements[i]);
+                    }
+                }
+                document.getElementById('bash').innerHTML+=" <input type='text' class='inputbox'onkeypress='this.style.width = ((this.value.length + 1) * 8) + &quot;px&quot;;'>";
                 changeBottom();
             }
             changeBottom();
