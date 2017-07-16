@@ -6,13 +6,14 @@
         <link rel="stylesheet" href="styles/style.css">
     </head>
     <body>
-        <div class="wrapper">
+        <div class="wrapper" onclick="document.getElementsByClassName('inputbox')[0].focus(); ">
             <div class="bash" id="bash">
             </div>
         </div>
         <endora>
         <script type="text/javascript">
             var version = "Beta 0.1";
+            var inputboxValue = "";
             function changeBottom() {
                 var bashTextHeight = document.getElementById('bash').offsetHeight;
                 if ((window.innerHeight - bashTextHeight) > 0) {
@@ -25,12 +26,13 @@
             function echo(input) {
                 document.getElementById('bash').innerHTML+=input;
                 var inputElements = document.getElementsByClassName('inputbox');
-                if (inputElements[0] != undefined) {
-                    for (var i = 0; i < inputElements.length; i++) {
-                        inputElements[i].parentNode.removeChild(inputElements[i]);
-                    }
+                for (var i = 0; i < inputElements.length; i++) {
+                    //inputboxValue+=inputElements[i].value;
+                    inputElements[i].parentNode.removeChild(inputElements[i]);
                 }
-                document.getElementById('bash').innerHTML+=" <input type='text' class='inputbox'onkeypress='this.style.width = ((this.value.length + 1) * 8) + &quot;px&quot;;'>";
+                document.getElementById('bash').innerHTML+=" <input type='text' class='inputbox' onfocus='this.style.width = ((this.value.length + 1) * 8) + &quot;px&quot;;' onkeypress='this.style.width = ((this.value.length + 1) * 8) + &quot;px&quot;; inputboxValue = this.value;' value='" + inputboxValue + "'>";
+                //document.getElementById('bash').innerHTML+=" <input type='text' class='inputbox' inputboxValue = this.value;' value='" + inputboxValue + "'>";
+                inputElements[0].style.width = ((inputElements[0].value.length + 1) * 8) + "px";
                 changeBottom();
             }
             changeBottom();
