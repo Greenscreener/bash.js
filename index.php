@@ -7,8 +7,7 @@
     </head>
     <body>
         <div class="wrapper" onclick="document.getElementsByClassName('inputbox')[0].focus(); ">
-            <div class="bash" id="bash">
-            </div>
+            <div class="bash" id="bash"></div>
         </div>
         <endora>
         <script type="text/javascript">
@@ -18,8 +17,10 @@
             var machinename = "bashjs";
             var workingDirectory = "~";
             var loggedIn = false;
+            var bashHistory = [];
+            var bashHistoryIndex = -1;
             function userPrefix() {
-                return username + "@" + machinename + ":" + workingDirectory + "$";
+                return username + "@" + machinename + ":" + workingDirectory + "$ ";
             }
             function changeBottom() {
                 var bashTextHeight = document.getElementById('bash').offsetHeight;
@@ -29,11 +30,43 @@
                     document.getElementById('bash').style.bottom = "0px";
                 }
             }
+            function historyScroll(direction) {
+                if (loggedIn == true) {
+                    if (bashHistoryIndex == -1) {
+                        bashHistory[-1] = inputboxValue;
+                    }
+                    if (direction == "up" && bashHistoryIndex < (bashHistory.length -1)) {
+                        bashHistoryIndex++;
+                    } else if (direction == "down" && bashHistoryIndex != -1) {
+                        bashHistoryIndex--;
+                    }
+
+                    document.getElementsByClassName('inputbox')[0].value = bashHistory[bashHistoryIndex];
+                    inputboxValue = bashHistory[bashHistoryIndex];
+                    var inputElements = document.getElementsByClassName('inputbox');
+                    inputElements[0].style.width = ((inputElements[0].value.length + 1) * 8) + "px";
+                    console.log(bashHistoryIndex + ": " + bashHistory[bashHistoryIndex]);
+                }
+            }
             function inputKeyDown(event) {
                 var key = event.keyCode;
-                if (key == 13) {
-                    sendCommand();
+                const downArrow = 40;
+                const upArrow = 38;
+                const enter = 13;
+                switch (key) {
+                    case enter:
+                        sendCommand();
+                        break;
+                    case upArrow:
+                        historyScroll("up");
+                        break;
+                    case downArrow:
+                        historyScroll("down");
+                        break;
+                    default:
+                        break;
                 }
+
             }
             function sendCommand() {
                 var inputValue = inputboxValue;
@@ -45,6 +78,7 @@
                     echo("<br>")
                 }
                 if (loggedIn == true) {
+                    bashHistory.unshift(inputValue);
                     inputValue = inputValue.trimLeft(" ");
                     if (inputValue.length == 0) {
                         lastEcho("");
@@ -63,11 +97,11 @@
                     if (inputValue == "") {
                         username = "";
                         inputElements[0].type = "text";
-                        echo("login:");
+                        echo("login: ");
                     } else {
                         if (username == "") {
                             username = inputValue;
-                            echo("Password:");
+                            echo("Password: ");
                             inputElements[0].type = "password";
                         } else {
                             if (inputValue == "password") {
@@ -75,7 +109,7 @@
                                 inputElements[0].type = "text";
                                 lastEcho("Welcome");
                             } else {
-                                echo("Login incorrect<br>login:");
+                                echo("Login incorrect<br>login: ");
                                 inputElements[0].type = "text";
                                 username = "";
                             }
@@ -94,14 +128,14 @@
                     //inputboxValue+=inputElements[i].value;
                     inputElements[i].parentNode.removeChild(inputElements[i]);
                 }
-                document.getElementById('bash').innerHTML+=" <input type='text' class='inputbox' onfocus='this.style.width = ((this.value.length + 1) * 8) + &quot;px&quot;;' onkeypress='this.style.width = ((this.value.length + 1) * 8) + &quot;px&quot;; inputboxValue = this.value;' value='" + inputboxValue + "' onkeydown='inputboxValue = this.value; inputKeyDown(event);'>";
+                document.getElementById('bash').innerHTML+="<input type='text' class='inputbox' onfocus='this.style.width = ((this.value.length + 1) * 8) + &quot;px&quot;;' onkeypress='this.style.width = ((this.value.length + 1) * 8) + &quot;px&quot;; inputboxValue = this.value;' value='" + inputboxValue + "' onkeydown='inputboxValue = this.value; inputKeyDown(event);'>";
                 //document.getElementById('bash').innerHTML+=" <input type='text' class='inputbox' inputboxValue = this.value;' value='" + inputboxValue + "'>";
                 inputElements[0].style.width = ((inputElements[0].value.length + 1) * 8) + "px";
                 changeBottom();
                 document.getElementsByClassName('inputbox')[0].focus();
             }
             changeBottom();
-            echo("Bash.js " + version + " tty1 <br> <br> login:");
+            echo("Bash.js " + version + " tty1 <br><br>login: ");
 
         </script>
     </body>
