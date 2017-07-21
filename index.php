@@ -11,7 +11,7 @@
         </div>
         <endora>
         <script type="text/javascript">
-            var version = "Beta 0.1";
+            var version = "Beta 0.2";
             var inputboxValue = "";
             var username = "";
             var machinename = "bashjs";
@@ -45,7 +45,7 @@
                     inputboxValue = bashHistory[bashHistoryIndex];
                     var inputElements = document.getElementsByClassName('inputbox');
                     inputElements[0].style.width = ((inputElements[0].value.length + 1) * 8) + "px";
-                    console.log(bashHistoryIndex + ": " + bashHistory[bashHistoryIndex]);
+                    //console.log(bashHistoryIndex + ": " + bashHistory[bashHistoryIndex]);
                 }
             }
             function inputKeyDown(event) {
@@ -69,6 +69,7 @@
 
             }
             function sendCommand() {
+                bashHistoryIndex = -1;
                 var inputValue = inputboxValue;
                 inputboxValue = "";
                 var inputElements = document.getElementsByClassName('inputbox');
@@ -78,16 +79,34 @@
                     echo("<br>")
                 }
                 if (loggedIn == true) {
-                    bashHistory.unshift(inputValue);
+                    if (bashHistory[0] != inputValue) {
+                        bashHistory.unshift(inputValue);
+                    }
                     inputValue = inputValue.trimLeft(" ");
                     if (inputValue.length == 0) {
                         lastEcho("");
                         return;
                     }
                     var inputValueSplitted = inputValue.split(" ");
+                    var inputParams = inputValue.replace(inputValueSplitted[0], "");
+                    inputParams = inputParams.trimLeft(" ");
                     switch (inputValueSplitted[0]) {
                         case "helloworld":
                             lastEcho("Hello World!")
+                            return;
+                        case "echo":
+                            lastEcho(inputParams);
+                            return;
+                        case "exit":
+                            loggedIn = false;
+                            username = "";
+                            document.getElementById('bash').innerHTML = "";
+                            bashHistory = [];
+                            echo("Bash.js " + version + " tty1 <br><br>login: ");
+                            return;
+                        case "clear":
+                            document.getElementById('bash').innerHTML = "";
+                            lastEcho("");
                             return;
                         default:
                             lastEcho("Unknown command.");
@@ -107,7 +126,7 @@
                             if (inputValue == "password") {
                                 loggedIn = true;
                                 inputElements[0].type = "text";
-                                lastEcho("Welcome");
+                                lastEcho("Welcome, " + username + "!");
                             } else {
                                 echo("Login incorrect<br>login: ");
                                 inputElements[0].type = "text";
