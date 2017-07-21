@@ -109,7 +109,7 @@
                             lastEcho("");
                             return;
                         default:
-                            lastEcho("Unknown command.");
+                            lastEcho(inputValueSplitted[0] + ": command not found");
                             return;
                     }
                 } else {
