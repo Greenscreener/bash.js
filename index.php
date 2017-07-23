@@ -15,12 +15,16 @@
             var inputboxValue = "";
             var username = "";
             var machinename = "bashjs";
-            var workingDirectory = "~";
+            var workingDirectory = "";
             var loggedIn = false;
             var bashHistory = [];
             var bashHistoryIndex = -1;
             function userPrefix() {
-                return username + "@" + machinename + ":" + workingDirectory + "$ ";
+                if (workingDirectory == ("/home/" + username)) {
+                    return username + "@" + machinename + ":" + "~" + "$ ";
+                } else {
+                    return username + "@" + machinename + ":" + workingDirectory + "$ ";
+                }
             }
             function changeBottom() {
                 var bashTextHeight = document.getElementById('bash').offsetHeight;
@@ -108,6 +112,9 @@
                             document.getElementById('bash').innerHTML = "";
                             lastEcho("");
                             return;
+                        case "pwd":
+                            lastEcho(workingDirectory);
+                            return;
                         default:
                             lastEcho(inputValueSplitted[0] + ": command not found");
                             return;
@@ -127,6 +134,7 @@
                                 loggedIn = true;
                                 inputElements[0].type = "text";
                                 lastEcho("Welcome, " + username + "!");
+                                workingDirectory = "/home/" + username;
                             } else {
                                 echo("Login incorrect<br>login: ");
                                 inputElements[0].type = "text";
