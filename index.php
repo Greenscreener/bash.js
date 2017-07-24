@@ -34,6 +34,25 @@
                     document.getElementById('bash').style.bottom = "0px";
                 }
             }
+            function Directory (name) {
+                this.name = name;
+                this.containsDirs = [];
+                this.containsFiles = [];
+                this.addFile = function (name) {
+                    this.containsFiles[name] = "";
+                }
+                this.addDirectory = function (name) {
+                    this.containsDirs[name] = (new Directory(name));
+                }
+                this.listContents = function () {
+                    for (var i in this.containsDirs) {
+                        echo("<br>" + this.containsDirs[i].name);
+                    }
+                    for (var i in this.containsFiles) {
+                        echo("<br>" + this.containsFiles[i]);
+                    }
+                }
+            }
             function historyScroll(direction) {
                 if (loggedIn == true) {
                     if (bashHistoryIndex == -1) {
@@ -72,6 +91,7 @@
                 }
 
             }
+
             function sendCommand() {
                 bashHistoryIndex = -1;
                 var inputValue = inputboxValue;
@@ -135,6 +155,7 @@
                                 inputElements[0].type = "text";
                                 lastEcho("Welcome, " + username + "!");
                                 workingDirectory = "/home/" + username;
+                                fileTree.containsDirs["home"].addDirectory(username);
                             } else {
                                 echo("Login incorrect<br>login: ");
                                 inputElements[0].type = "text";
@@ -161,6 +182,8 @@
                 changeBottom();
                 document.getElementsByClassName('inputbox')[0].focus();
             }
+            var fileTree = new Directory("");
+            fileTree.addDirectory("home");
             changeBottom();
             echo("Bash.js " + version + " tty1 <br><br>login: ");
 
