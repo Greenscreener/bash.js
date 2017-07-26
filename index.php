@@ -20,10 +20,10 @@
             var bashHistory = [];
             var bashHistoryIndex = -1;
             function userPrefix() {
-                if (workingDirectory == ("/home/" + username)) {
+                if (workingDirectory.printPath() == ("/home/" + username + "/")) {
                     return username + "@" + machinename + ":" + "~" + "$ ";
                 } else {
-                    return username + "@" + machinename + ":" + workingDirectory + "$ ";
+                    return username + "@" + machinename + ":" + workingDirectory.printPath() + "$ ";
                 }
             }
             function changeBottom() {
@@ -34,25 +34,48 @@
                     document.getElementById('bash').style.bottom = "0px";
                 }
             }
-            function Directory (name) {
+            function TextFile (name, parent) {
                 this.name = name;
+                this.parent = parent;
+                this.content = "";
+            }
+            function Directory (name, parent) {
+                this.name = name;
+                this.parent = parent;
                 this.containsDirs = [];
                 this.containsFiles = [];
                 this.addFile = function (name) {
-                    this.containsFiles[name] = "";
+                    var newFile = new TextFile(name, this);
+                    this.containsFiles[name] = newFile;
+                    return newFile;
                 }
                 this.addDirectory = function (name) {
-                    this.containsDirs[name] = (new Directory(name));
+                    var newDir = new Directory(name, this);
+                    this.containsDirs[name] = newDir;
+                    return newDir;
                 }
                 this.listContents = function () {
                     for (var i in this.containsDirs) {
                         echo("<br>" + this.containsDirs[i].name);
                     }
                     for (var i in this.containsFiles) {
-                        echo("<br>" + this.containsFiles[i]);
+                        echo("<br>" + this.containsFiles[i].name);
                     }
                 }
+                this.printPath = function (input) {
+                    var pathSoFar = input || "";
+                    // console.log(pathSoFar);
+                    if (this.parent === undefined) {
+                        return("/" + pathSoFar);
+
+                    } else {
+                        var returned = this.parent.printPath(this.name + "/" +  pathSoFar);
+                        return returned;
+                    }
+                }
+
             }
+
             function historyScroll(direction) {
                 if (loggedIn == true) {
                     if (bashHistoryIndex == -1) {
@@ -153,9 +176,8 @@
                             if (inputValue == "password") {
                                 loggedIn = true;
                                 inputElements[0].type = "text";
+                                workingDirectory = fileTree.containsDirs["home"].addDirectory(username);
                                 lastEcho("Welcome, " + username + "!");
-                                workingDirectory = "/home/" + username;
-                                fileTree.containsDirs["home"].addDirectory(username);
                             } else {
                                 echo("Login incorrect<br>login: ");
                                 inputElements[0].type = "text";
