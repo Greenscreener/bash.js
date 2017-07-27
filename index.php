@@ -21,9 +21,9 @@
             var bashHistoryIndex = -1;
             function userPrefix() {
                 if (workingDirectory.printPath() == ("/home/" + username + "/")) {
-                    return username + "@" + machinename + ":" + "~" + "$ ";
+                    return "<span class='userandmachine'>" + username + "@" + machinename + "</span>:<span class='workingdirectory'>" + "~" + "</span>$ ";
                 } else {
-                    return username + "@" + machinename + ":" + workingDirectory.printPath() + "$ ";
+                    return "<span class='userandmachine'>" + username + "@" + machinename + "</span>:<span class='workingdirectory'>" + workingDirectory.printPath() + "</span>$ ";
                 }
             }
             function changeBottom() {
@@ -51,16 +51,20 @@
                 }
                 this.addDirectory = function (name) {
                     var newDir = new Directory(name, this);
+                    newDir.containsDirs["."] = newDir;
+                    newDir.containsDirs[".."] = newDir.parent;
                     this.containsDirs[name] = newDir;
                     return newDir;
                 }
                 this.listContents = function () {
+                    var output = [];
                     for (var i in this.containsDirs) {
-                        echo("<br>" + this.containsDirs[i].name);
+                        if (i[0] != ".") {output.push(this.containsDirs[i].name);}
                     }
                     for (var i in this.containsFiles) {
-                        echo("<br>" + this.containsFiles[i].name);
+                        if (i[0] != ".") {output.push(this.containsFiles[i].name);}
                     }
+                    return output;
                 }
                 this.printPath = function (input) {
                     var pathSoFar = input || "";
@@ -156,8 +160,25 @@
                             lastEcho("");
                             return;
                         case "pwd":
-                            lastEcho(workingDirectory);
+                            lastEcho(workingDirectory.printPath());
                             return;
+                        case "ls":
+                            var contents = workingDirectory.listContents();
+                            for (var i in contents) {
+                                echo(contents[i]);
+                            }
+                            lastEcho("");
+                            break;
+                        case "cd":
+                            var targetDir = identifyDir(inputParams.split(" ")[0]);
+                            if (!targetDir) {
+                                lastEcho("bash: cd: " + inputParams.split(" ")[0] + ": No such file or directory");
+                            } else {
+                                workingDirectory = targetDir;
+                                lastEcho("");
+                            }
+
+                            break;
                         default:
                             lastEcho(inputValueSplitted[0] + ": command not found");
                             return;
@@ -184,6 +205,36 @@
                                 username = "";
                             }
                         }
+                    }
+                }
+            }
+            function identifyDir(input) {
+                if (input[0] == "/") {
+                    var output = "fileTree";
+                    input = input.split("/");
+                    input.shift();
+                    if (input[input.length - 1] == "") {input.pop();}
+                    for (var i in input) {
+                        output+=(".containsDirs['" + input[i] + "']");
+                    }
+                    var outputDir = eval(output);
+                    if (outputDir === undefined) {
+                        return false;
+                    } else {
+                        return outputDir;
+                    }
+                } else {
+                    var output = "workingDirectory";
+                    input = input.split("/");
+                    if (input[input.length - 1] == "") {input.pop();}
+                    for (var i in input) {
+                        output+=(".containsDirs['" + input[i] + "']");
+                    }
+                    var outputDir = eval(output);
+                    if (outputDir === undefined) {
+                        return false;
+                    } else {
+                        return outputDir;
                     }
                 }
             }

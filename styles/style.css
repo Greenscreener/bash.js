@@ -31,3 +31,10 @@ html {
 .inputbox:focus {
     outline:none;
 }
+.userandmachine {
+    color: #7be234;
+    weight: bold;
+}
+.workingdirectory {
+    color: #5e9ccf;
+}
