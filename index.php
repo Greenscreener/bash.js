@@ -179,6 +179,30 @@
                             }
 
                             break;
+                        case "mkdir":
+                            if (identifyNonDir(inputParams.split(" ")[0])[0] == false) {
+                                lastEcho("mkdir: cannot create directory '" + inputParams.split(" ")[0] + "': No such file or directory");
+                            } else {
+                                if (identifyNonDir(inputParams.split(" ")[0])[0].containsDirs[identifyNonDir(inputParams.split(" ")[0])[1]] === undefined) {
+                                    identifyNonDir(inputParams.split(" ")[0])[0].addDirectory(identifyNonDir(inputParams.split(" ")[0])[1]);
+                                    lastEcho("sucksessfullll");
+                                } else {
+                                    lastEcho("mkdir: cannot create directory '" + inputParams.split(" ")[0] + "': File exists")
+                                }
+                            }
+                            break;
+                        case "touch":
+                            if (identifyNonDir(inputParams.split(" ")[0])[0] == false) {
+                                lastEcho("touch: cannot touch '" + inputParams.split(" ")[0] + "': No such file or directory");
+                            } else {
+                                if (identifyNonDir(inputParams.split(" ")[0])[0].containsFiles[identifyNonDir(inputParams.split(" ")[0])[1]] === undefined) {
+                                    identifyNonDir(inputParams.split(" ")[0])[0].addFile(identifyNonDir(inputParams.split(" ")[0])[1]);
+                                    lastEcho("sucksessfuuuuuul");
+                                } else {
+                                    lastEcho("doprdelenecoseposralo");
+                                }
+                            }
+                            break;
                         default:
                             lastEcho(inputValueSplitted[0] + ": command not found");
                             return;
@@ -237,6 +261,21 @@
                         return outputDir;
                     }
                 }
+            }
+            function identifyNonDir(input) {
+                var split = input.split("/");
+                if (split[split.length - 1] == "") {split.pop();}
+                var file = split[split.length - 1];
+                var path = split.slice(0, -1);
+                if (path.length == 0) {
+                    path = "";
+                } else if (path[0] == ""){
+                    path = "/";
+                } else {
+                    path = path.join("/");
+                }
+                var toReturn = [identifyDir(path),file];
+                return toReturn;
             }
             function lastEcho(input) {
                 echo(input);
