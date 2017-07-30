@@ -185,7 +185,7 @@
                             } else {
                                 if (identifyNonDir(inputParams.split(" ")[0])[0].containsDirs[identifyNonDir(inputParams.split(" ")[0])[1]] === undefined) {
                                     identifyNonDir(inputParams.split(" ")[0])[0].addDirectory(identifyNonDir(inputParams.split(" ")[0])[1]);
-                                    lastEcho("sucksessfullll");
+                                    lastEcho("");
                                 } else {
                                     lastEcho("mkdir: cannot create directory '" + inputParams.split(" ")[0] + "': File exists")
                                 }
@@ -197,9 +197,9 @@
                             } else {
                                 if (identifyNonDir(inputParams.split(" ")[0])[0].containsFiles[identifyNonDir(inputParams.split(" ")[0])[1]] === undefined) {
                                     identifyNonDir(inputParams.split(" ")[0])[0].addFile(identifyNonDir(inputParams.split(" ")[0])[1]);
-                                    lastEcho("sucksessfuuuuuul");
+                                    lastEcho("");
                                 } else {
-                                    lastEcho("doprdelenecoseposralo");
+                                    lastEcho("");
                                 }
                             }
                             break;
@@ -279,7 +279,11 @@
             }
             function lastEcho(input) {
                 echo(input);
-                echo("<br>" + userPrefix());
+                if (input == "") {
+                    echo(userPrefix());
+                } else {
+                    echo("<br>" + userPrefix());
+                }
             }
             function echo(input) {
                 document.getElementById('bash').innerHTML+=input;
