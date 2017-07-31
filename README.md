@@ -11,14 +11,24 @@ Just open [http://bashjs.greenscreener.tk](http://bashjs.greenscreener.tk) in yo
 PS: Password to any user is `password`
 ## What to do
 `helloworld` - prints out `Hello World!`
+
 `echo`
+
 `exit` - loggs you out
+
 `clear` - clears the output
+
 `pwd` - prints out path of current working directory
+
 `ls` - prints contents of a directory
+
 `cd` - changes working directory
+
 `mkdir` - makes a new directory
+
 `touch` - makes a new file
+
 `cat` - reads contents of a file
+
 ## Contribution
 Feel free to post issues or pull requests, if you think they will help.
