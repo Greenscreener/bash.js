@@ -218,9 +218,15 @@
                         echo("login: ");
                     } else {
                         if (username == "") {
-                            username = inputValue;
-                            echo("Password: ");
-                            inputElements[0].type = "password";
+                            if (inputValue.indexOf("/") + 1) {
+                                echo("Usernames can't contain slashes<br>login: ");
+                                inputElements[0].type = "text";
+                                username = "";
+                            } else {
+                                username = inputValue;
+                                echo("Password: ");
+                                inputElements[0].type = "password";
+                            }
                         } else {
                             if (inputValue == "password") {
                                 loggedIn = true;
