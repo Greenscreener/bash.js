@@ -207,6 +207,15 @@
                                 }
                             }
                             break;
+                        case "cat":
+                            if (identifyNonDir(inputParams.split(" ")[0])[0] == false) {
+                                lastEcho("cat: " + inputParams.split(" ")[0] + ": No such file or directory");
+                            } else if (identifyNonDir(inputParams.split(" ")[0])[0].containsFiles[identifyNonDir(inputParams.split(" ")[0])[1]] === undefined) {
+                                lastEcho("cat: " + inputParams.split(" ")[0] + ": No such file or directory");
+                            } else {
+                                lastEcho(identifyNonDir(inputParams.split(" ")[0])[0].containsFiles[identifyNonDir(inputParams.split(" ")[0])[1]].content);
+                            }
+                            break;
                         default:
                             lastEcho(inputValueSplitted[0] + ": command not found");
                             return;
