@@ -23,7 +23,7 @@
                 if (workingDirectory.printPath() == ("/home/" + username + "/")) {
                     return "<span class='userandmachine'>" + username + "@" + machinename + "</span>:<span class='workingdirectory'>" + "~" + "</span>$ ";
                 } else {
-                    return "<span class='userandmachine'>" + username + "@" + machinename + "</span>:<span class='workingdirectory'>" + workingDirectory.printPath() + "</span>$ ";
+                    return "<span class='userandmachine'>" + username + "@" + machinename + "</span>:<span class='workingdirectory'>" + workingDirectory.printPath().replace("/home/" + username, "~") + "</span>$ ";
                 }
             }
             function changeBottom() {
@@ -171,13 +171,17 @@
                             break;
                         case "cd":
                             var targetDir = identifyDir(inputParams.split(" ")[0]);
-                            if (!targetDir) {
-                                lastEcho("bash: cd: " + inputParams.split(" ")[0] + ": No such file or directory");
-                            } else {
-                                workingDirectory = targetDir;
+                            if (inputParams.split(" ")[0] == "") {
+                                workingDirectory = identifyDir("/home/" + username);
                                 lastEcho("");
+                            } else {
+                                if (!targetDir) {
+                                    lastEcho("bash: cd: " + inputParams.split(" ")[0] + ": No such file or directory");
+                                } else {
+                                    workingDirectory = targetDir;
+                                    lastEcho("");
+                                }
                             }
-
                             break;
                         case "mkdir":
                             if (identifyNonDir(inputParams.split(" ")[0])[0] == false) {
