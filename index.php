@@ -253,27 +253,27 @@
             }
             function identifyDir(input) {
                 if (input[0] == "/") {
-                    var output = "fileTree";
+                    var output = fileTree;
                     input = input.split("/");
                     input.shift();
                     if (input[input.length - 1] == "") {input.pop();}
                     for (var i in input) {
-                        output+=(".containsDirs['" + input[i] + "']");
+                        output = output.containsDirs[input[i]];
                     }
-                    var outputDir = eval(output);
+                    var outputDir = output;
                     if (outputDir === undefined) {
                         return false;
                     } else {
                         return outputDir;
                     }
                 } else {
-                    var output = "workingDirectory";
+                    var output = workingDirectory;
                     input = input.split("/");
                     if (input[input.length - 1] == "") {input.pop();}
                     for (var i in input) {
-                        output+=(".containsDirs['" + input[i] + "']");
+                        output = output.containsDirs[input[i]];
                     }
-                    var outputDir = eval(output);
+                    var outputDir = output;
                     if (outputDir === undefined) {
                         return false;
                     } else {
