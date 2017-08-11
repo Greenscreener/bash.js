@@ -11,7 +11,7 @@
         </div>
         <endora>
         <script type="text/javascript">
-            var version = "Beta 0.2";
+            var version = "Beta";
             var inputboxValue = "";
             var username = "";
             var machinename = "bashjs";
