@@ -6,7 +6,7 @@ My first attempt was [JSAUCE](https://github.com/Greenscreener/.jsauce), which I
 This was attempted before, maybe even multiple times, mostly better.
 I wanted to do it as a challange, to learn, so be tolerant.
 Enjoy.
-## Installation
+## Installation (not really)
 Just open [http://bashjs.greenscreener.tk](http://bashjs.greenscreener.tk) in your favorite browser (preferably Chrome).
 PS: Password to any user is `password`
 ## What to do

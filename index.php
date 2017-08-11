@@ -146,7 +146,31 @@
                             lastEcho("Hello World!")
                             return;
                         case "echo":
-                            lastEcho(inputParams);
+                            var inputParamsSplitted = inputParams.split(" ");
+                            if (inputParamsSplitted.length > 1) {
+                                if (inputParamsSplitted[inputParamsSplitted.length - 2] == ">>" || inputParamsSplitted[inputParamsSplitted.length - 2] == ">") {
+                                    var targetFile = identifyFile(inputParamsSplitted[inputParamsSplitted.length - 1]);
+                                    if (!targetFile) {
+                                        if (identifyNonDir(inputParamsSplitted[inputParamsSplitted.length - 1])[0] == false) {
+                                            lastEcho("bash: " + inputParamsSplitted[inputParamsSplitted.length - 1] + ": No such file or directory");
+                                        } else {
+                                            identifyNonDir(inputParamsSplitted[inputParamsSplitted.length - 1])[0].addFile(identifyNonDir(inputParamsSplitted[inputParamsSplitted.length - 1])[1]);
+                                            targetFile = identifyFile(inputParamsSplitted[inputParamsSplitted.length - 1]);
+                                        }
+
+                                    }
+                                    if (inputParamsSplitted[inputParamsSplitted.length - 2] == ">>") {
+                                        targetFile.content+= ("\n" + inputParamsSplitted.slice(0,-2));
+                                    } else {
+                                        targetFile.content = inputParamsSplitted.slice(0,-2).join(" ");
+                                    }
+                                    lastEcho("");
+                                } else {
+                                    lastEcho(inputParams);
+                                }
+                            } else {
+                                lastEcho(inputParams);
+                            }
                             return;
                         case "exit":
                             loggedIn = false;
@@ -295,6 +319,13 @@
                 }
                 var toReturn = [identifyDir(path),file];
                 return toReturn;
+            }
+            function identifyFile(input) {
+                if (identifyNonDir(input)[0].containsFiles[identifyNonDir(input)[1]] === undefined) {
+                    return false;
+                } else {
+                    return identifyNonDir(input)[0].containsFiles[identifyNonDir(input)[1]];
+                }
             }
             function lastEcho(input) {
                 echo(input);
