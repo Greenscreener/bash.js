@@ -30,5 +30,7 @@ PS: Password to any user is `password`
 
 `cat` - reads contents of a file
 
+`nyancat` - NYANYANYANYANYANYNYANYANYANYANYANYANYANYANYN!
+
 ## Contribution
 Feel free to post issues or pull requests, if you think they will help.

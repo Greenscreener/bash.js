@@ -130,7 +130,7 @@
                     echo("<br>")
                 }
                 if (loggedIn == true) {
-                    if (bashHistory[0] != inputValue) {
+                    if (bashHistory[0] != inputValue && inputValue.trimLeft(" ") != "") {
                         bashHistory.unshift(inputValue);
                     }
                     inputValue = inputValue.trimLeft(" ");
@@ -160,7 +160,7 @@
 
                                     }
                                     if (inputParamsSplitted[inputParamsSplitted.length - 2] == ">>") {
-                                        targetFile.content+= ("\n" + inputParamsSplitted.slice(0,-2));
+                                        targetFile.content+= ("\n" + inputParamsSplitted.slice(0,-2).join(" "));
                                     } else {
                                         targetFile.content = inputParamsSplitted.slice(0,-2).join(" ");
                                     }
@@ -239,6 +239,9 @@
                             } else {
                                 lastEcho(identifyNonDir(inputParams.split(" ")[0])[0].containsFiles[identifyNonDir(inputParams.split(" ")[0])[1]].content);
                             }
+                            break;
+                        case "nyancat":
+                            lastEcho("<iframe src='https://www.youtube.com/embed/QH2-TGUlwu4?autoplay=1&controls=0&loop=1' frameBorder='0' width='200' height='200'>");
                             break;
                         default:
                             lastEcho(inputValueSplitted[0] + ": command not found");

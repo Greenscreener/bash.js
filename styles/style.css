@@ -10,7 +10,8 @@
     background-color: black;
     color: white;
     position: absolute;
-    white-space: pre;
+    white-space: pre-wrap;
+    width: 100%;
 }
 body {
     overflow:hidden;
