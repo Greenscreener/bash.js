@@ -16,14 +16,28 @@
             var version = "Beta";
             var inputboxValue = "";
             var activeUsername = "";
-            var users = [
-                {name:"root", password:"SBNJTRN+FjG7owHVrKtue7eqdM4RhdRWVl71HXN2d7I="},
-            ];
+            var loggedIn = false;
             var machinename = "bashjs";
             var workingDirectory = "";
-            var loggedIn = false;
-            var bashHistory = [];
             var bashHistoryIndex = -1;
+            if (localStorage.getItem("success") != "true") {
+                var users = [
+                    {name:"root", password:"SBNJTRN+FjG7owHVrKtue7eqdM4RhdRWVl71HXN2d7I=", bashHistory:[]},
+                ];
+                var bashHistory = [];
+                var fileTree = new Directory("");
+            } else {
+                var users = JSON.parse(localStorage.getItem("users"));
+                var bashHistory = JSON.parse(localStorage.getItem("bashHistory"));
+                //var fileTree = new Directory("");
+                //var fileTree = Object.assign({},fileTree,JSON.parse(localStorage.getItem("fileTree")));
+            }
+            window.onunload = function () {
+                localStorage.setItem("users", JSON.stringify(users));
+                localStorage.setItem("bashHistory", JSON.stringify(bashHistory));
+                //localStorage.setItem("fileTree", JSON.stringify(fileTree));
+                localStorage.setItem("success","true");
+            }
             function userPrefix() {
                 if (workingDirectory.printPath() == ("/home/" + activeUsername + "/")) {
                     return "<span class='userandmachine'>" + activeUsername + "@" + machinename + "</span>:<span class='workingdirectory'>" + "~" + "</span>$ ";
@@ -47,8 +61,8 @@
             function Directory (name, parent) {
                 this.name = name;
                 this.parent = parent;
-                this.containsDirs = [];
-                this.containsFiles = [];
+                this.containsDirs = {};
+                this.containsFiles = {};
                 this.addFile = function (name) {
                     var newFile = new TextFile(name, this);
                     this.containsFiles[name] = newFile;
@@ -180,7 +194,6 @@
                             loggedIn = false;
                             activeUsername = "";
                             document.getElementById('bash').innerHTML = "";
-                            bashHistory = [];
                             echo("Bash.js " + version + " tty1 <br><br>login: ");
                             return;
                         case "clear":
@@ -194,7 +207,6 @@
                             if (identifyDir(inputParams.split(" ")[0]) == false) {
                                 lastEcho("ls: cannot access '" + inputParams.split(" ")[0] + "': No such file or directory");
                             } else {
-                                console.log(inputParams.split(" ")[0]);
                                 lastEcho(identifyDir(inputParams.split(" ")[0]).listContents().join("\n"));
                             }
                             break;
@@ -376,7 +388,6 @@
                     return users.find(function (element) {return element.name == username;});
                 }
             }
-            var fileTree = new Directory("");
             fileTree.addDirectory("home");
             changeBottom();
             echo("Bash.js " + version + " tty1 <br><br>login: ");
