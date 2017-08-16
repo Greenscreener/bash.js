@@ -11,20 +11,24 @@
             <div class="bash" id="bash"></div>
         </div>
         <endora>
+        <script src="https://rawgit.com/Caligatio/jsSHA/v2.3.1/src/sha256.js"></script>
         <script type="text/javascript">
             var version = "Beta";
             var inputboxValue = "";
-            var username = "";
+            var activeUsername = "";
+            var users = [
+                {name:"root", password:"SBNJTRN+FjG7owHVrKtue7eqdM4RhdRWVl71HXN2d7I="},
+            ];
             var machinename = "bashjs";
             var workingDirectory = "";
             var loggedIn = false;
             var bashHistory = [];
             var bashHistoryIndex = -1;
             function userPrefix() {
-                if (workingDirectory.printPath() == ("/home/" + username + "/")) {
-                    return "<span class='userandmachine'>" + username + "@" + machinename + "</span>:<span class='workingdirectory'>" + "~" + "</span>$ ";
+                if (workingDirectory.printPath() == ("/home/" + activeUsername + "/")) {
+                    return "<span class='userandmachine'>" + activeUsername + "@" + machinename + "</span>:<span class='workingdirectory'>" + "~" + "</span>$ ";
                 } else {
-                    return "<span class='userandmachine'>" + username + "@" + machinename + "</span>:<span class='workingdirectory'>" + workingDirectory.printPath().replace("/home/" + username, "~") + "</span>$ ";
+                    return "<span class='userandmachine'>" + activeUsername + "@" + machinename + "</span>:<span class='workingdirectory'>" + workingDirectory.printPath().replace("/home/" + activeUsername, "~") + "</span>$ ";
                 }
             }
             function changeBottom() {
@@ -119,7 +123,6 @@
                 }
 
             }
-
             function sendCommand() {
                 bashHistoryIndex = -1;
                 var inputValue = inputboxValue;
@@ -175,7 +178,7 @@
                             return;
                         case "exit":
                             loggedIn = false;
-                            username = "";
+                            activeUsername = "";
                             document.getElementById('bash').innerHTML = "";
                             bashHistory = [];
                             echo("Bash.js " + version + " tty1 <br><br>login: ");
@@ -198,7 +201,7 @@
                         case "cd":
                             var targetDir = identifyDir(inputParams.split(" ")[0]);
                             if (inputParams.split(" ")[0] == "") {
-                                workingDirectory = identifyDir("/home/" + username);
+                                workingDirectory = identifyDir("/home/" + activeUsername);
                                 lastEcho("");
                             } else {
                                 if (!targetDir) {
@@ -251,30 +254,43 @@
                     }
                 } else {
                     if (inputValue == "") {
-                        username = "";
+                        activeUsername = "";
                         inputElements[0].type = "text";
                         echo("login: ");
                     } else {
-                        if (username == "") {
+                        if (activeUsername == "") {
                             if (inputValue.indexOf("/") + 1) {
                                 echo("Usernames can't contain slashes<br>login: ");
                                 inputElements[0].type = "text";
-                                username = "";
+                                activeUsername = "";
                             } else {
-                                username = inputValue;
+                                activeUsername = inputValue;
                                 echo("Password: ");
                                 inputElements[0].type = "password";
                             }
                         } else {
-                            if (inputValue == "password") {
-                                loggedIn = true;
-                                inputElements[0].type = "text";
-                                workingDirectory = fileTree.containsDirs["home"].addDirectory(username);
-                                lastEcho("Welcome, " + username + "!");
+                            var shaObj = new jsSHA("SHA-256","TEXT");
+                            shaObj.update(inputValue);
+                            var passwordHash = shaObj.getHash("B64");
+                            if (findUser(activeUsername)) {
+                                if (findUser(activeUsername).password == passwordHash) {
+                                    loggedIn = true;
+                                    inputElements[0].type = "text";
+                                    if (identifyDir("/home/" + activeUsername)) {
+                                        workingDirectory = identifyDir("/home/" + activeUsername);
+                                    } else {
+                                        workingDirectory = fileTree.containsDirs["home"].addDirectory(activeUsername);
+                                    }
+                                    lastEcho("Welcome, " + activeUsername + "!");
+                                } else {
+                                    echo("Login incorrect<br>login: ");
+                                    inputElements[0].type = "text";
+                                    activeUsername = "";
+                                }
                             } else {
                                 echo("Login incorrect<br>login: ");
                                 inputElements[0].type = "text";
-                                username = "";
+                                activeUsername = "";
                             }
                         }
                     }
@@ -352,6 +368,13 @@
                 inputElements[0].style.width = ((inputElements[0].value.length + 1) * 8) + "px";
                 changeBottom();
                 document.getElementsByClassName('inputbox')[0].focus();
+            }
+            function findUser(username) {
+                if (users.find(function (element) {return element.name == username;}) === undefined) {
+                    return false;
+                } else {
+                    return users.find(function (element) {return element.name == username;});
+                }
             }
             var fileTree = new Directory("");
             fileTree.addDirectory("home");

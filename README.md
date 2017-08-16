@@ -8,7 +8,8 @@ I wanted to do it as a challange, to learn, so be tolerant.
 Enjoy.
 ## Installation (not really)
 Just open [http://bashjs.greenscreener.tk](http://bashjs.greenscreener.tk) in your favorite browser (preferably Chrome).
-PS: Password to any user is `password`
+
+Login with root root.
 ## What to do
 `helloworld` - prints out `Hello World!`
 
