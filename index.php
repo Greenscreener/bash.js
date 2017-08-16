@@ -4,6 +4,7 @@
         <meta charset="utf-8">
         <title>bash.js</title>
         <link rel="stylesheet" href="styles/style.css">
+        <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700" rel="stylesheet">
     </head>
     <body>
         <div class="wrapper" onclick="document.getElementsByClassName('inputbox')[0].focus(); ">
@@ -59,7 +60,7 @@
                 this.listContents = function () {
                     var output = [];
                     for (var i in this.containsDirs) {
-                        if (i[0] != ".") {output.push(this.containsDirs[i].name);}
+                        if (i[0] != ".") {output.push("<span class='workingdirectory'>" + this.containsDirs[i].name + "</span>");}
                     }
                     for (var i in this.containsFiles) {
                         if (i[0] != ".") {output.push(this.containsFiles[i].name);}
@@ -187,11 +188,12 @@
                             lastEcho(workingDirectory.printPath());
                             return;
                         case "ls":
-                            var contents = workingDirectory.listContents();
-                            for (var i in contents) {
-                                echo(contents[i]);
+                            if (identifyDir(inputParams.split(" ")[0]) == false) {
+                                lastEcho("ls: cannot access '" + inputParams.split(" ")[0] + "': No such file or directory");
+                            } else {
+                                console.log(inputParams.split(" ")[0]);
+                                lastEcho(identifyDir(inputParams.split(" ")[0]).listContents().join("\n"));
                             }
-                            lastEcho("");
                             break;
                         case "cd":
                             var targetDir = identifyDir(inputParams.split(" ")[0]);

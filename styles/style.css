@@ -6,7 +6,7 @@
 
 }
 .bash {
-    font-family: monospace;
+    font-family: 'Ubuntu Mono', monospace;
     background-color: black;
     color: white;
     position: absolute;
@@ -34,8 +34,9 @@ html {
 }
 .userandmachine {
     color: #7be234;
-    weight: bold;
+    font-weight: bold;
 }
 .workingdirectory {
     color: #5e9ccf;
+    font-weight: bold;
 }
