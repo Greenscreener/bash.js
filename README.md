@@ -28,7 +28,7 @@ Feel free to post issues or pull requests, if you think they will help.
 ## TODO
 - [ ] adduser
 - [ ] passwd for any user
-- [ ] maybe separate js code into multiple files?
+- [x] maybe separate js code into multiple files?
 - [x] separate js code from html
 - [x] passwd
 - [x] localStorage
