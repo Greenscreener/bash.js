@@ -9,7 +9,7 @@ Enjoy.
 ## Installation (not really)
 Just open [http://bashjs.greenscreener.tk](http://bashjs.greenscreener.tk) in your favorite browser (preferably Chrome).
 
-Login with root root.
+Login with user: `root`, password: `root`.
 ## What to do
 `helloworld` - prints out `Hello World!`
 
