@@ -37,15 +37,15 @@ Login with user: `root`, password: `root`. (I recommend changing your password.)
 ## Contribution
 Feel free to post issues or pull requests, if you think they will help.
 ## TODO
-[ ] adduser
-[ ] passwd for any user
-[ ] maybe separate js code into multiple files?
-[x] separate js code from html
-[x] passwd
-[x] localStorage
-[x] More advanced user systen
-[x] Echo to files
-[x] cat
-[x] mkdir and touch
-[x] working directory
-[x] login
+- [ ] adduser
+- [ ] passwd for any user
+- [ ] maybe separate js code into multiple files?
+- [x] separate js code from html
+- [x] passwd
+- [x] localStorage
+- [x] More advanced user systen
+- [x] Echo to files
+- [x] cat
+- [x] mkdir and touch
+- [x] working directory
+- [x] login
