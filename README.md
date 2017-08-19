@@ -11,29 +11,18 @@ Just open [http://bashjs.greenscreener.tk](http://bashjs.greenscreener.tk) in yo
 
 Login with user: `root`, password: `root`. (I recommend changing your password.)
 ## What to do
-`helloworld` - prints out `Hello World!`
-
-`echo`
-
-`exit` - loggs you out
-
-`clear` - clears the output
-
-`pwd` - prints out path of current working directory
-
-`ls` - prints contents of a directory
-
-`cd` - changes working directory
-
-`mkdir` - makes a new directory
-
-`touch` - makes a new file
-
-`cat` - reads contents of a file
-
-`nyancat` - NYANYANYANYANYANYNYANYANYANYANYANYANYANYANYN!
-
-`passwd` - changes the password of the current user
+- `helloworld` - prints out `Hello World!`
+- `echo`
+- `exit` - loggs you out
+- `clear` - clears the output
+- `pwd` - prints out path of current working directory
+- `ls` - prints contents of a directory
+- `cd` - changes working directory
+- `mkdir` - makes a new directory
+- `touch` - makes a new file
+- `cat` - reads contents of a file
+- `nyancat` - NYANYANYANYANYANYNYANYANYANYANYANYANYANYANYN!
+- `passwd` - changes the password of the current user
 ## Contribution
 Feel free to post issues or pull requests, if you think they will help.
 ## TODO
