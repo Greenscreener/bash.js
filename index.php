@@ -11,8 +11,11 @@
             <div class="bash" id="bash"></div>
         </div>
         <endora>
-        <script src="https://rawgit.com/Caligatio/jsSHA/v2.3.1/src/sha256.js"></script>
+        <script src="//cdn.rawgit.com/Caligatio/jsSHA/v2.3.1/src/sha256.js"></script>
+        <!--<script src="//ajax.googleapis.com/ajax/libs/dojo/1.12.1/dojo/dojo.js"></script>-->
+        <script src="//scripts.greenscreener.tk/cycle.js"></script>
         <script type="text/javascript">
+            //dojo.require("dojox.json.ref");
             var version = "Beta";
             var inputboxValue = "";
             var activeUsername = "";
@@ -26,16 +29,16 @@
                 ];
                 var bashHistory = [];
                 var fileTree = new Directory("");
+                fileTree.addDirectory("home");
             } else {
                 var users = JSON.parse(localStorage.getItem("users"));
                 var bashHistory = JSON.parse(localStorage.getItem("bashHistory"));
-                //var fileTree = new Directory("");
-                //var fileTree = Object.assign({},fileTree,JSON.parse(localStorage.getItem("fileTree")));
+                var fileTree = Object.assign(new Directory(), JSON.retrocycle(JSON.parse(localStorage.getItem("fileTree"),jsonReviver)));
             }
             window.onunload = function () {
                 localStorage.setItem("users", JSON.stringify(users));
                 localStorage.setItem("bashHistory", JSON.stringify(bashHistory));
-                //localStorage.setItem("fileTree", JSON.stringify(fileTree));
+                localStorage.setItem("fileTree", JSON.stringify(JSON.decycle(fileTree)));
                 localStorage.setItem("success","true");
             }
             function userPrefix() {
@@ -57,12 +60,14 @@
                 this.name = name;
                 this.parent = parent;
                 this.content = "";
+                this.type = "TextFile";
             }
             function Directory (name, parent) {
                 this.name = name;
                 this.parent = parent;
                 this.containsDirs = {};
                 this.containsFiles = {};
+                this.type = "Directory";
                 this.addFile = function (name) {
                     var newFile = new TextFile(name, this);
                     this.containsFiles[name] = newFile;
@@ -388,7 +393,15 @@
                     return users.find(function (element) {return element.name == username;});
                 }
             }
-            fileTree.addDirectory("home");
+            function jsonReviver(key,value) {
+                if (value.type == "Directory") {
+                    return Object.assign(new Directory, value);
+                } else if (value.type == "TextFile") {
+                    return Object.assign(new TextFile, value);
+                } else {
+                    return value;
+                }
+            }
             changeBottom();
             echo("Bash.js " + version + " tty1 <br><br>login: ");
 
