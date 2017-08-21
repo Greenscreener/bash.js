@@ -17,19 +17,19 @@ function changeBottom() {
 function historyScroll(direction) {
     if (loggedIn == true) {
         if (bashHistoryIndex == -1) {
-            bashHistory[-1] = inputboxValue;
+            findUser(activeUsername).bashHistory[-1] = inputboxValue;
         }
-        if (direction == "up" && bashHistoryIndex < (bashHistory.length -1)) {
+        if (direction == "up" && bashHistoryIndex < (findUser(activeUsername).bashHistory.length -1)) {
             bashHistoryIndex++;
         } else if (direction == "down" && bashHistoryIndex != -1) {
             bashHistoryIndex--;
         }
 
-        document.getElementsByClassName('inputbox')[0].value = bashHistory[bashHistoryIndex];
-        inputboxValue = bashHistory[bashHistoryIndex];
+        document.getElementsByClassName('inputbox')[0].value = findUser(activeUsername).bashHistory[bashHistoryIndex];
+        inputboxValue = findUser(activeUsername).bashHistory[bashHistoryIndex];
         var inputElements = document.getElementsByClassName('inputbox');
         inputElements[0].style.width = ((inputElements[0].value.length + 1) * 8) + "px";
-        //console.log(bashHistoryIndex + ": " + bashHistory[bashHistoryIndex]);
+        //console.log(bashHistoryIndex + ": " + findUser(activeUsername).bashHistory[bashHistoryIndex]);
     }
 }
 function inputKeyDown(event) {

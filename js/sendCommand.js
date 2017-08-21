@@ -10,8 +10,8 @@ function sendCommand() {
     }
     if (loggedIn == true) {
         if (commandRunning == false) {
-            if (bashHistory[0] != inputValue && inputValue.trimLeft(" ") != "") {
-                bashHistory.unshift(inputValue);
+            if (findUser(activeUsername).bashHistory[0] != inputValue && inputValue.trimLeft(" ") != "") {
+                findUser(activeUsername).bashHistory.unshift(inputValue);
             }
             inputValue = inputValue.trimLeft(" ");
             if (inputValue.length == 0) {

@@ -30,6 +30,7 @@ Feel free to post issues or pull requests, if you think they will help.
 - [ ] permissions
 - [ ] adduser
 - [ ] passwd for any user
+- [x] user bash history
 - [x] maybe separate js code into multiple files?
 - [x] separate js code from html
 - [x] passwd
