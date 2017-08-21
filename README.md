@@ -26,6 +26,8 @@ Login with user: `root`, password: `root`. (I recommend changing your password.)
 ## Contribution
 Feel free to post issues or pull requests, if you think they will help.
 ## TODO
+- [ ] sudo
+- [ ] permissions
 - [ ] adduser
 - [ ] passwd for any user
 - [x] maybe separate js code into multiple files?
