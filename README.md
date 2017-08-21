@@ -23,13 +23,15 @@ Login with user: `root`, password: `root`. (I recommend changing your password.)
 - `cat` - reads contents of a file
 - `nyancat` - NYANYANYANYANYANYNYANYANYANYANYANYANYANYANYN!
 - `passwd` - changes the password of the current user
+- `adduser` - Creates a new user
 ## Contribution
 Feel free to post issues or pull requests, if you think they will help.
 ## TODO
+- [ ] rewrite adduser to be more authentic
 - [ ] sudo
 - [ ] permissions
-- [ ] adduser
 - [ ] passwd for any user
+- [X] adduser
 - [x] user bash history
 - [x] maybe separate js code into multiple files?
 - [x] separate js code from html

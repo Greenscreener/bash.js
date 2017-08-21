@@ -25,6 +25,6 @@ window.onunload = function () {
     //localStorage.setItem("bashHistory", JSON.stringify(bashHistory));
     localStorage.setItem("fileTree", JSON.stringify(JSON.decycle(fileTree)));
     localStorage.setItem("success","true");
-}
+};
 changeBottom();
 echo("Bash.js " + version + " tty1 <br><br>login: ");

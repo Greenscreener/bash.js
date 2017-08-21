@@ -6,7 +6,7 @@ function sendCommand() {
     if (inputElements[0].type == "text") {
         echo(inputValue + "<br>");
     } else {
-        echo("<br>")
+        echo("<br>");
     }
     if (loggedIn == true) {
         if (commandRunning == false) {
@@ -23,7 +23,7 @@ function sendCommand() {
             inputParams = inputParams.trimLeft(" ");
             switch (inputValueSplitted[0]) {
                 case "helloworld":
-                    lastEcho("Hello World!")
+                    lastEcho("Hello World!");
                     return;
                 case "echo":
                     var inputParamsSplitted = inputParams.split(" ");
@@ -94,7 +94,7 @@ function sendCommand() {
                             identifyNonDir(inputParams.split(" ")[0])[0].addDirectory(identifyNonDir(inputParams.split(" ")[0])[1]);
                             lastEcho("");
                         } else {
-                            lastEcho("mkdir: cannot create directory '" + inputParams.split(" ")[0] + "': File exists")
+                            lastEcho("mkdir: cannot create directory '" + inputParams.split(" ")[0] + "': File exists");
                         }
                     }
                     break;
@@ -128,6 +128,17 @@ function sendCommand() {
                     echo("(current) UNIX password: ");
                     inputElements[0].type = "password";
                     commandRunningId = "passwd1";
+                    break;
+                case "adduser":
+                    commandRunning = true;
+                    if (inputParams.split(" ")[0] == "") {
+                        lastEcho("USAGE: adduser <username>");
+                        return;
+                    }
+                    window.adduserNewUsername = inputParams.split(" ")[0];
+                    echo("Enter new UNIX password: ");
+                    inputElements[0].type = "password";
+                    commandRunningId = "adduser1";
                     break;
                 default:
                     lastEcho(inputValueSplitted[0] + ": command not found");
@@ -178,6 +189,28 @@ function sendCommand() {
                         }
                     }
                     break;
+                case "adduser1":
+                    window.password1 = globInputValue;
+                    globInputValue = undefined;
+                    echo("Retype new UNIX password: ");
+                    inputElements[0].type = "password";
+                    commandRunningId = "adduser2";
+                    break;
+                case "adduser2":
+                    var password2 = globInputValue;
+                    globInputValue = undefined;
+                    if (password1 != password2) {
+                        echo("Sorry, passwords do not match\n");
+                        echo("passwd: Authentication token manipulation error\n");
+                        lastEcho("passwd: password unchanged");
+                    } else {
+                        if (!addUser(adduserNewUsername,password1)) {
+                            lastEcho("User exists");
+                            return;
+                        }
+                        lastEcho("passwd: password updated successfully");
+                    }
+                    break;
                 default:
                     break;
             }
@@ -209,7 +242,7 @@ function sendCommand() {
                         if (identifyDir("/home/" + activeUsername)) {
                             workingDirectory = identifyDir("/home/" + activeUsername);
                         } else {
-                            workingDirectory = fileTree.containsDirs["home"].addDirectory(activeUsername);
+                            workingDirectory = fileTree.containsDirs.home.addDirectory(activeUsername);
                         }
                         lastEcho("Welcome, " + activeUsername + "!");
                     } else {

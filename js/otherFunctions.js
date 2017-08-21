@@ -34,9 +34,9 @@ function historyScroll(direction) {
 }
 function inputKeyDown(event) {
     var key = event.keyCode;
-    const downArrow = 40;
-    const upArrow = 38;
-    const enter = 13;
+    var downArrow = 40;
+    var upArrow = 38;
+    var enter = 13;
     switch (key) {
         case enter:
             sendCommand();
@@ -77,10 +77,19 @@ function echo(input) {
 }
 function jsonReviver(key,value) {
     if (value.type == "Directory") {
-        return Object.assign(new Directory, value);
+        return Object.assign(new Directory(), value);
     } else if (value.type == "TextFile") {
-        return Object.assign(new TextFile, value);
+        return Object.assign(new TextFile(), value);
     } else {
         return value;
     }
+}
+function addUser(newUsername,newPassword) {
+    if (findUser(newUsername)) {
+        return false;
+    }
+    var shaObj = new jsSHA("SHA-256","TEXT");
+    shaObj.update(newPassword);
+    users.push({name:newUsername,password:shaObj.getHash("B64"),bashHistory:[]});
+    return findUser(newUsername);
 }
