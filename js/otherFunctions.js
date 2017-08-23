@@ -93,3 +93,21 @@ function addUser(newUsername,newPassword) {
     users.push({name:newUsername,password:shaObj.getHash("B64"),bashHistory:[]});
     return findUser(newUsername);
 }
+function loadGitHubAjax() {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var githubCommits = JSON.parse(this.responseText);
+            var latestCommitDate = new Date(githubCommits[0].commit.author.date);
+            document.getElementById('welcomemessage').innerHTML = "Welcome, " + activeUsername + " to the JavaScript Bash Emulator. \n\nLatest commit on GitHub: \nHash: <a href='https://github.com/Greenscreener/bash.js/commit/" + githubCommits[0].sha + "'>" + githubCommits[0].sha + "</a>\nMessage: " + githubCommits[0].commit.message + "\nAuthor: " + githubCommits[0].commit.author.name + "\nTime: " + latestCommitDate.toUTCString();
+            changeBottom();
+        }
+  };
+  xhttp.open("GET", "https://api.github.com/repos/Greenscreener/bash.js/commits", true);
+  xhttp.send();
+}
+function welcomeMessage() {
+    if (document.getElementById('welcomeMessage') === undefined) document.getElementById('welcomemessage').parentNode.removeChild(document.getElementById('welcomemessage'));
+    lastEcho("<p id='welcomemessage'></p>");
+    loadGitHubAjax();
+}

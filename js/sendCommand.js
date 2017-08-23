@@ -244,7 +244,7 @@ function sendCommand() {
                         } else {
                             workingDirectory = fileTree.containsDirs.home.addDirectory(activeUsername);
                         }
-                        lastEcho("Welcome, " + activeUsername + "!");
+                        welcomeMessage();
                     } else {
                         echo("Login incorrect<br>login: ");
                         inputElements[0].type = "text";
