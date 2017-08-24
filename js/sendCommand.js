@@ -124,10 +124,31 @@ function sendCommand() {
                     break;
                 case "passwd":
                     commandRunning = true;
-                    echo("Changing password for " + activeUsername + ".\n");
-                    echo("(current) UNIX password: ");
-                    inputElements[0].type = "password";
-                    commandRunningId = "passwd1";
+                    if (inputParams.split(" ")[0] == "") {
+                        window.passwdUsername = activeUsername;
+                        echo("Changing password for " + passwdUsername + ".\n");
+                        echo("(current) UNIX password: ");
+                        inputElements[0].type = "password";
+                        commandRunningId = "passwd1";
+                        return;
+                    } else {
+                        window.passwdUsername = inputParams.split(" ")[0];
+                        if (findUser(passwdUsername)) {
+                            if (activeUsername != "root") {
+                                lastEcho("passwd: You may not view or modify password information for " + passwdUsername + ".");
+                                return;
+                            } else {
+                                window.oldPassword = findUser(passwdUsername).password;
+                                echo("Enter new UNIX password: ");
+                                inputElements[0].type = "password";
+                                commandRunningId = "passwd2";
+                                return;
+                            }
+                        } else {
+                            lastEcho("passwd: user '" + passwdUsername + "' does not exist");
+                        }
+                    }
+
                     break;
                 case "adduser":
                     commandRunning = true;
@@ -184,7 +205,7 @@ function sendCommand() {
                             inputElements[0].type = "password";
                             commandRunningId = "passwd2";
                         } else {
-                            findUser(activeUsername).password = shaObj.getHash("B64");
+                            findUser(passwdUsername).password = shaObj.getHash("B64");
                             lastEcho("passwd: password updated successfully");
                         }
                     }

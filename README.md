@@ -30,7 +30,7 @@ Feel free to post issues or pull requests, if you think they will help.
 - [ ] rewrite adduser to be more authentic
 - [ ] sudo
 - [ ] permissions
-- [ ] passwd for any user
+- [x] passwd for any user
 - [X] adduser
 - [x] user bash history
 - [x] maybe separate js code into multiple files?
